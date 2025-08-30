@@ -29,7 +29,7 @@ const App = () => {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LandingPage />}/>
-          <Route path="/signup" element={<SigninUp/>}/>
+          <Route path="/signup" element={<SigninUp />}/>
           <Route path="/login" element={<Login/>} />
 
           {/* Routes chercher d'emploi */}
