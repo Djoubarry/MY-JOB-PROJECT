@@ -13,9 +13,15 @@ import {
   Loader,
   Upload,
 } from 'lucide-react'
-import { validateAvatar, validateEmail, validatePassword } from '../utils/helper'
+import { validateAvatar, validateEmail, validatePassword } from '../../utils/helper'
+import uploadImage from '../../utils/uploadImage'
+import axiosInstance from '../../utils/axiosInstance'
+import { API_PATHS } from '../../utils/apiPaths'
+import { useAuth } from '../../context/AuthContext'
 
 const SigninUp = () => {
+  const { login } = useAuth();
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -110,14 +116,51 @@ const SigninUp = () => {
 
     try {
       // Appel API à ajouter ici
+      let avatarUrl = "";
+
+      // upload image if present 
+      if (formData.avatar) {
+        const imgUploadRes = await uploadImage(formData.avatar);
+        avatarUrl = imgUploadRes.imageUrl || "";
+      }
+
+      const reponse = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
+        name: formData.fullName,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+        avatar: avatarUrl || "",
+      });
+
+      // Handle successful registration
+      setFormState((prev) => ({
+        ...prev,
+        loading: false,
+        success: true,
+        errors: {},
+    }));
+      const { token } = reponse.data;
+
+      if (token) {
+        login(reponse.data, token);
+
+        // Redirect based on role
+        setTimeout(() => {
+          window.location.href = formData.role === "employer"
+          ? "/employer-dashbord"
+          : "/find-jobs"
+        }, 2000);
+      }
+
     } catch (error) {
       console.log("error", error)
+      console.log("backend message:", error.response?.data);
       setFormState((prev) => ({
         ...prev,
         loading: false,
         errors: {
           submit:
-            error.response?.message ||
+            error.response?.data?.message ||
             "Échec de connexion. Vérifiez vos identifiants.",
         },
       }))
