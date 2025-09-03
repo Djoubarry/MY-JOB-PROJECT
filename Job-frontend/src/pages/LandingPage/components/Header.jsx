@@ -2,11 +2,11 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Briefcase } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
 
 
 const Header = () => {
-    const isAuthenticated = true
-    const user = {fullName: "Djoulde", role: "employer"};
+    const {user, isAuthenticated} = useAuth()
     const navigate = useNavigate();
 
   return <motion.header
@@ -39,7 +39,7 @@ const Header = () => {
             onClick={() => {
               navigate(
                 isAuthenticated && user?.role === "employer"
-                  ?"/employer-dashboard"
+                  ?"/employer-dashbord"
                   :"/login"
               );
             }}
@@ -54,7 +54,7 @@ const Header = () => {
                 <a 
                   href={
                     user?.role === "employer"
-                    ? "/employer-dashboard"
+                    ? "/employer-dashbord"
                     : "/find-jobs"}
                   className='bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-sm hover:shadow-md'>
                     Tableau de bord
@@ -64,12 +64,12 @@ const Header = () => {
               <>
                 <a
                   href='/login'
-                  className='text-gray-600 hover:text-gray-900 transition-colors font-medium px-4 py-2 rounded-lg hover:bg-gray-500 '
+                  className='text-gray-600 hover:text-gray-900 transition-colors font-medium px-4 py-2 rounded-lg hover:bg-gray-50 '
                 >
                   Connexion
                 </a>
                 <a 
-                  href=""
+                  href="/signup"
                   className='bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-sm hover:shadow-md'
                   >
                     Inscription

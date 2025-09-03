@@ -5,15 +5,14 @@ import { motion } from 'framer-motion';
 import { Search, ArrowRight, Users, Building, TrendingUp } from 'lucide-react';
 // Importation de la fonction de navigation de react-router-dom (probablement une faute, voir commentaire plus bas)
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../context/AuthContext';
 
 
 // Composant principal Hero
 const Hero = () => {
   // Variable pour vérifier si l'utilisateur est authentifié (à remplacer par la vraie logique d'authentification)
-  const isAuthenticated = true
-  // Objet utilisateur fictif (à remplacer par les vraies données utilisateur)
-  const user = {fullName: "Djoulde", role: "employer"};
-
+     const {user, isAuthenticated} = useAuth()
+ 
   // Hook de navigation (attention : la bonne fonction est useNavigate, pas userNavigate)
   const navigate = useNavigate();
 
@@ -78,7 +77,7 @@ const Hero = () => {
                         onClick={() => {
                             navigate(
                                 isAuthenticated && user?.role === "employer"
-                                ? "/employer-dashboard"
+                                ? "/employer-dashbord"
                                 : "/login"
                             );
                         }}
